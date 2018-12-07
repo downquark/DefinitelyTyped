@@ -99,8 +99,8 @@ const ifaceOutEndpoint: usb.Endpoint = iface.endpoint(1) as usb.OutEndpoint;
 
 const inEndpoint: usb.InEndpoint = new usb.InEndpoint(device, endpointDesc);
 
-inEndpoint.direction = "in";
-inEndpoint.transferType = 1;
+inEndpoint.direction = usb.EndpointDirection["In"];
+inEndpoint.transferType = usb.EndpointType["Isochronous"];
 inEndpoint.timeout = 1;
 inEndpoint.descriptor = endpointDesc;
 const xferInEndpoint: usb.InEndpoint = inEndpoint.transfer(1, (error: string, data: Buffer) => inEndpoint);
@@ -112,8 +112,8 @@ inEndpoint.stopPoll(() => null);
 inEndpoint.stopPoll();
 
 const outEndpoint: usb.OutEndpoint = new usb.OutEndpoint(device, endpointDesc);
-outEndpoint.direction = "out";
-outEndpoint.transferType = 1;
+outEndpoint.direction = usb.EndpointDirection["Out"];
+outEndpoint.transferType = usb.EndpointType["Isochronous"];
 outEndpoint.timeout = 1;
 outEndpoint.descriptor = endpointDesc;
 inEndpoint.on("error", (err) => null);

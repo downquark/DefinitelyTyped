@@ -33,7 +33,7 @@ export class Device {
 
 export class DeviceDescriptor {
   bLength: number;
-  bDescriptorType: number;
+  bDescriptorType: DescriptorType;
   bcdUSB: number;
   bDeviceClass: number;
   bDeviceSubClass: number;
@@ -62,6 +62,7 @@ export class ConfigDescriptor {
 }
 
 export class Interface {
+  id: number;
   interfaceNumber: number;
   altSetting: number;
   descriptor: InterfaceDescriptor;
@@ -92,15 +93,15 @@ export class InterfaceDescriptor {
 }
 
 export interface Endpoint extends EventEmitter {
-  direction: string;
-  transferType: number;
+  direction: EndpointDirection;
+  transferType: EndpointType;
   timeout: number;
   descriptor: EndpointDescriptor;
 }
 
 export class InEndpoint extends EventEmitter implements Endpoint {
-  direction: string;
-  transferType: number;
+  direction: EndpointDirection;
+  transferType: EndpointType;
   timeout: number;
   descriptor: EndpointDescriptor;
   constructor(device: Device, descriptor: EndpointDescriptor);
@@ -110,8 +111,8 @@ export class InEndpoint extends EventEmitter implements Endpoint {
 }
 
 export class OutEndpoint extends EventEmitter implements Endpoint {
-  direction: string;
-  transferType: number;
+  direction: EndpointDirection;
+  transferType: EndpointType;
   timeout: number;
   descriptor: EndpointDescriptor;
   constructor(device: Device, descriptor: EndpointDescriptor);
@@ -129,6 +130,37 @@ export class EndpointDescriptor {
   bRefresh: number;
   bSynchAddress: number;
   extra: Buffer;
+}
+
+export enum DescriptorType {
+  Device = 1,
+  Configuration,
+  String,
+  Interface,
+  Endpoint,
+  DeviceQualifier,
+  OtherSpeedConfiguration,
+  InterfacePower,
+  OnTheGo,
+}
+
+export enum EndpointType {
+  Control = 0,
+  Isochronous = 1,
+  Bulk = 2,
+  Interrupt = 3
+}
+
+export enum EndpointDirection {
+  In,
+  Out,
+  Both
+}
+
+export class CapabilityDescriptor {
+  bLength: number;
+  bDescriptorType: number;
+  bDevCapabilityType: number;
 }
 
 export function findByIds(vid: number, pid: number): Device;
